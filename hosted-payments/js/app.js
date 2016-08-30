@@ -1,16 +1,16 @@
 (function() {
   'use strict';
-
+  // debugger;
   var zoozApi;
 
-  var messageTypes = {
-    CARD_NOT_ADDED:     'cardNotAdded',
-    CARD_ADDED:         'cardAdded',
-    VALIDATION_FAILED:  'validationFailed',
-    SUBMIT:             'submit',
-    TRANSLATE:          'translate',
-    INIT:               'init'
-  };
+  // var messageTypes = {
+  //   CARD_NOT_ADDED:     'cardNotAdded',
+  //   CARD_ADDED:         'cardAdded',
+  //   VALIDATION_FAILED:  'validationFailed',
+  //   SUBMIT:             'submit',
+  //   TRANSLATE:          'translate',
+  //   INIT:               'init'
+  // };
 
   var errorMessages = {
     INVALID_CARD_NUMBER:  'invalidCardNumber',
@@ -19,199 +19,288 @@
     INVALID_YEAR:         'invalidYear'
   }
 
-  var CARD_NUMBER = '#cardNumber';
-  var CVV         = '#cvv';
+  var CARD_NUMBER = '#c_no';
+  var CVV         = '#c_sec';
   var MONTH       = '#month';
   var YEAR        = '#year';
+  var targetHost = '*';
 
-  window.addEventListener("message", handleMessage);
-
-
-  function init(data) {
-    var initParams = {
-      isSandbox:  data.isSandbox, // Must be false for production
-      uniqueId:   data.appId, // App's unique ID as registered in the Zooz developer portal
-    };
-
-    zoozApi = new Zooz.Ext.External(initParams);
-  }
-
-
-  function isAllowedHost(host) {
-    return host === 'https://gett-staging.herokuapp.com' ||
-           host === 'http://gett.dev:3000';
-  }
-
-
-  function getCardHash() {
-    var cardNumber  = document.querySelector(CARD_NUMBER).value;
-    var sha1        = new jsSHA('SHA-1', 'TEXT');
-
-    sha1.update(cardNumber);
-
-    return sha1.getHash('HEX');
-  }
-
-
-  function buildCardAddedMessage(response) {
-    return {
-      action:         messageTypes.CARD_ADDED,
-      status:         response.paymentMethodStatus.toString(),
-      token:          response.paymentMethodToken,
-      hash:           getCardHash(),
-      month:          response.expirationMonth,
-      year:           response.expirationYear,
-      binNumber:      response.binNumber,
-      lastFourDigits: response.lastFourDigits
-    };
-  }
-
-
-  function buildCardNotAddedMessage(response) {
-    var processorError = '';
-
-    if (response.processorError) {
-      processorError =
-        'DeclineCode: ' +
-        response.processorError.declineCode.toString() +
-        '; DeclineReason: '
-        + response.processorError.declineReason.toString();
+  (function initSelectOptions(){
+    var str = '';
+    for(var i = 1; i <= 13; i++){
+        var stub = i < 10?'0' : '';
+        str += '<option>'+ stub + i + '</option>';
     }
-
-    var responseError =
-      response.responseErrorCode.toString() + ': ' +
-      response.errorDescription.toString();
-
-    return {
-      action:         messageTypes.CARD_NOT_ADDED,
-      responseError:  responseError,
-      processorError: processorError
-    };
-  }
-
-
-  function addPaymentMethod(jsonData, eventOrigin) {
-    function succFunc(response) {
-      var message = buildCardAddedMessage(response);
-      parent.postMessage(message, eventOrigin);
+    $("#month")
+      .html(str)
+      .selectpicker('refresh');
+    str = '';
+    var currentYear = new Date().getFullYear();
+    for(var i = 0; i < 6; i++){
+      str += '<option>'+ (currentYear + i) + '</option>';
     }
+    $("#year")
+      .html(str)
+      .selectpicker('refresh');
+  })();
+  $(document).ready(function() {
+    $('.selectpicker').selectpicker({
+      style: 'btn-default',
+      size: false
+    });
+    $(function() {
+    $('#CreditCardInfo').submit(function() {
+            submit();
+            return true; // return false to cancel form action
+        });
+    });
+  });
 
-    function failFunc(response) {
-      var message = buildCardNotAddedMessage(response);
-      parent.postMessage(message, eventOrigin);
-    }
+  // window.addEventListener("message", handleMessage);
 
-    var status = zoozApi.addPaymentMethod(jsonData, succFunc, failFunc);
-
-    if (status.code) {
-      var message = {
-        action:         messageTypes.CARD_NOT_ADDED,
-        responseError: 'addPaymentMethod() request has not been initiated. Please try again.',
-        processorError: ''
-      };
-
-      parent.postMessage(message, eventOrigin);
-    }
-  }
-
-
-  function handleMessage(event) {
-    if (!isAllowedHost(event.origin)) return;
-
-    if (event.data.action === messageTypes.SUBMIT) {
-      submit(event.data, event.origin);
-    }
-
-    if (event.data.action === messageTypes.TRANSLATE) {
-      translate(event.data);
-    }
-
-    if (event.data.action === messageTypes.INIT) {
-      init(event.data);
-    }
-  }
+  // function init(data) {
+  //   var initParams = {
+  //     isSandbox:  data.isSandbox, // Must be false for production
+  //     uniqueId:   data.appId, // App's unique ID as registered in the Zooz developer portal
+  //   };
+  //   console.log(initParams);
+  //   zoozApi = new Zooz.Ext.External(initParams);
+  // }
 
 
-  function translate(data) {
-    var cardNumber = document.querySelector(CARD_NUMBER);
-    var cvv        = document.querySelector(CVV);
-    var month      = document.querySelector(MONTH);
-    var year       = document.querySelector(YEAR);
-
-    cardNumber.placeholder  = data.cardNumber;
-    cvv.placeholder         = data.cvv;
-    month.placeholder       = data.month;
-    year.placeholder        = data.year;
-  }
+  // function isAllowedHost(host) {
+  //   return host === 'https://gett-staging.herokuapp.com' ||
+  //          host === 'http://gett.dev:3000';
+  // }
 
 
-  function submit(data, origin) {
+  // function getCardHash() {
+  //   var cardNumber  = document.querySelector(CARD_NUMBER).value;
+  //   var sha1        = new jsSHA('SHA-1', 'TEXT');
+
+  //   sha1.update(cardNumber);
+
+  //   return sha1.getHash('HEX');
+  // }
+
+
+  // function buildCardAddedMessage(response) {
+  //   return {
+  //     action:         messageTypes.CARD_ADDED,
+  //     status:         response.paymentMethodStatus.toString(),
+  //     token:          response.paymentMethodToken,
+  //     hash:           getCardHash(),
+  //     month:          response.expirationMonth,
+  //     year:           response.expirationYear,
+  //     binNumber:      response.binNumber,
+  //     lastFourDigits: response.lastFourDigits
+  //   };
+  // }
+
+
+  // function buildCardNotAddedMessage(response) {
+  //   var processorError = '';
+
+  //   if (response.processorError) {
+  //     processorError =
+  //       'DeclineCode: ' +
+  //       response.processorError.declineCode.toString() +
+  //       '; DeclineReason: '
+  //       + response.processorError.declineReason.toString();
+  //   }
+
+  //   var responseError =
+  //     response.responseErrorCode.toString() + ': ' +
+  //     response.errorDescription.toString();
+
+  //   return {
+  //     action:         messageTypes.CARD_NOT_ADDED,
+  //     responseError:  responseError,
+  //     processorError: processorError
+  //   };
+  // }
+
+
+  // function addPaymentMethod(jsonData, eventOrigin) {
+  //   function succFunc(response) {
+  //     var message = buildCardAddedMessage(response);
+  //     parent.postMessage(message, eventOrigin);
+  //   }
+
+  //   function failFunc(response) {
+  //     var message = buildCardNotAddedMessage(response);
+  //     parent.postMessage(message, eventOrigin);
+  //   }
+
+  //   var status = zoozApi.addPaymentMethod(jsonData, succFunc, failFunc);
+  //   if (status.code) {
+  //     var message = {
+  //       action:         messageTypes.CARD_NOT_ADDED,
+  //       responseError: 'addPaymentMethod() request has not been initiated. Please try again.',
+  //       processorError: ''
+  //     };
+
+  //     parent.postMessage(message, eventOrigin);
+  //   }
+  // }
+
+
+  // function handleMessage(event) {
+  //   debugger;
+  //   if (!isAllowedHost(event.origin)) return;
+
+  //   if (event.data.action === messageTypes.SUBMIT) {
+  //     submit(event.data, event.origin);
+  //   }
+
+  //   if (event.data.action === messageTypes.TRANSLATE) {
+  //     translate(event.data);
+  //   }
+
+  //   if (event.data.action === messageTypes.INIT) {
+  //     init(event.data);
+  //   }
+  // }
+
+
+  // function translate(data) {
+  //   var cardNumber = document.querySelector(CARD_NUMBER);
+  //   var cvv        = document.querySelector(CVV);
+  //   var month      = document.querySelector(MONTH);
+  //   var year       = document.querySelector(YEAR);
+
+  //   cardNumber.placeholder  = data.cardNumber;
+  //   cvv.placeholder         = data.cvv;
+  //   month.placeholder       = data.month;
+  //   year.placeholder        = data.year;
+  // }
+
+
+  var submit = function() {
     var cardData = getCardData();
-    if (!validateCardData(cardData, origin)) return;
-
-    var jSONdata = {
-      paymentToken: data.paymentToken,
-      email:        data.email,
-      paymentMethod: {
-        paymentMethodType: 'CreditCard',
-        paymentMethodDetails: {
-          cardHolderName: data.name,
-          cardNumber:     cardData.cardNumber,
-          month:          cardData.month,
-          year:           cardData.year,
-          cvvNumber:      cardData.cvv
-        },
-        configuration: {
-          rememberPaymentMethod: true
-        }
-      }
-    };
-
-    addPaymentMethod(jSONdata, origin);
+    if (!validateCardData(cardData)) return;
+    addPaymentMethod(cardData);
   }
 
+  function  addPaymentMethod(cardData){
+    var initParams = {
+                      isSandbox: true,
+                      uniqueId: 'PAPI_ZooZNP_PZZF3PLBGL22NDFF4QP7INFFHU_2'
+                      };  //  App's unique  ID  as  registered  in  the Zooz developer  portal
+    debugger;
+    var zoozApi = new Zooz.Ext.External(initParams);
 
+    var paymentRequest = {
+        paymentToken: getParameterByName('paymentToken'),
+        email: getParameterByName('email'),
+        paymentMethod: {
+            paymentMethodType: 'CreditCard',
+            paymentMethodDetails: {
+                cardNumber: cardData.cardNumber,
+                cardHolderName: getParameterByName('cardHolderName'),
+                month: cardData.month,
+                year: cardData.year,
+                cvvNumber: cardData.cvv
+            }
+        }
+    };
+
+    var succFunc = function (data) {
+        enableSubmitButton();
+        eventObj = {
+            eventType: 'paymentSuccess',
+            payment: {
+                paymentToken: getParameterByName('paymentToken'),
+                paymentMethodToken: data.paymentMethodToken
+            }
+        };
+        parent.postMessage(eventObj, targetHost);
+        console.log(eventObj);
+    };
+    var failFunc = function () {
+        // enableSubmitButton();
+        // isGeneralError = true;
+        // showErrorMessage('general');
+        // setFrameHeight();
+        // paymentFormElement.reset();
+        eventObj = {
+            eventType: 'paymentError'
+        };
+        parent.postMessage(eventObj, targetHost);
+        console.log(eventObj);
+    };
+    zoozApi.addPaymentMethod(paymentRequest, succFunc, failFunc);
+  }
   function getCardData() {
-    var year = document.querySelector(YEAR).value;
-
     return {
       cardNumber: document.querySelector(CARD_NUMBER).value,
       cvv:        document.querySelector(CVV).value,
       month:      document.querySelector(MONTH).value,
-      year:       year.length === 2 ? '20' + year : year
+      year:       document.querySelector(YEAR).value
     }
   }
 
 
-  function postError(error, targetOrigin) {
-    var message = { action: messageTypes.VALIDATION_FAILED, error: error };
-    parent.postMessage(message, targetOrigin)
-  }
+  // function postError(error, targetOrigin) {
+  //   var message = { action: messageTypes.VALIDATION_FAILED, error: error };
+  //   parent.postMessage(message, targetOrigin)
+  // }
 
-
-  function validateCardData(data, targetOrigin) {
+function validateCardData(data) {
     if (!validateCardNumber(data.cardNumber)) {
-      postError(errorMessages.INVALID_CARD_NUMBER, targetOrigin);
+      // postError(errorMessages.INVALID_CARD_NUMBER, targetOrigin);
+      console.log(errorMessages.INVALID_CARD_NUMBER);
       return false;
     }
 
     if (!validateMonth(data.month)) {
-      postError(errorMessages.INVALID_MONTH, targetOrigin);
+      console.log(errorMessages.INVALID_MONTH);
       return false;
     }
 
     if (!validateYear(data.year)) {
-      postError(errorMessages.INVALID_YEAR, targetOrigin);
+      console.log(errorMessages.INVALID_YEAR);
+
       return false;
     }
 
     if (!validateCVV(data.cvv)) {
-      postError(errorMessages.INVALID_CVV, targetOrigin);
+      console.log(errorMessages.INVALID_CVV);
       return false;
     }
 
     return true;
   }
+function getParameterByName(parameterName) {
+    parameterName = new RegExp('[?&]' + encodeURIComponent(parameterName) + '=([^&]*)').exec(location.search);
+    if (parameterName) {
+        return decodeURIComponent(parameterName[1]);
+    }
+};
+
+  // function validateCardData(data, targetOrigin) {
+  //   if (!validateCardNumber(data.cardNumber)) {
+  //     postError(errorMessages.INVALID_CARD_NUMBER, targetOrigin);
+  //     return false;
+  //   }
+
+  //   if (!validateMonth(data.month)) {
+  //     postError(errorMessages.INVALID_MONTH, targetOrigin);
+  //     return false;
+  //   }
+
+  //   if (!validateYear(data.year)) {
+  //     postError(errorMessages.INVALID_YEAR, targetOrigin);
+  //     return false;
+  //   }
+
+  //   if (!validateCVV(data.cvv)) {
+  //     postError(errorMessages.INVALID_CVV, targetOrigin);
+  //     return false;
+  //   }
+
+  //   return true;
+  // }
 
 
   function validateMonth(month) {
@@ -256,29 +345,3 @@
   }
 
 }());
-
-
-(function() {
-  'use strict';
-
-  var inputs = document.querySelectorAll('.Input');
-
-  [].forEach.call(inputs, function(input) {
-    var field = input.querySelector('.Input-field');
-    var clear = input.querySelector('.Input-clear');
-
-    function toggleClear() {
-      clear.style.display = field.value ? 'block' : 'none';
-    }
-
-    function clearInput() {
-      field.value = '';
-      toggleClear();
-    }
-
-    clear.addEventListener('click', clearInput);
-    field.addEventListener('keyup', toggleClear);
-    field.addEventListener('change', toggleClear);
-  });
-
-})();

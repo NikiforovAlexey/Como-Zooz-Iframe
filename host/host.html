@@ -18,10 +18,10 @@
 <br>
 
 <!--Comment1 change src to the zooz hosted payments domain https://paymentpages.zooz.com" file location-->
-<iframe id="zooziframe" width="400" height="150px"; frameborder="0" scrolling="no" src="http://como.local.com/Como/hosted-payments/iframe-passive.html" ></iframe>
+<iframe id="zooziframe" width="710" height="300px"; frameborder="0"  style ='margin-top: 200px;' scrolling="no" src="http://como.local.com/Como/hosted-payments/iframe-passive.html?cardHolderName='test@email.com'&amp;paymentToken=MJ24SQ3HYF2KQYJULESQ5D2RYA&amp;email='test@email.com'" ></iframe>
 <br>
 <br>
-<button id="go" style="font-family: sans-serif;# FFFFFF;background-color: #13689A; color: #FFFFFF; font-size: medium; height: 35px;width: 196px;" > <b>Submit Payment Form</b></button>
+<!-- <button id="go" style="font-family: sans-serif;# FFFFFF;background-color: #13689A; color: #FFFFFF; font-size: medium; height: 35px;width: 196px;" > <b>Submit Payment Form</b></button> -->
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="js/my-domain.js"></script>
 <script type="text/javascript" src="js/postMessage.js"></script>
@@ -32,18 +32,20 @@
     function handleMessage(event) {
 
         var message;
-        if ( !(event.origin === zoozDomain ) ) {
-            return false;
-        }
+        debugger;
+        // if ( !(event.origin === zoozDomain ) ) {
+        //     return false;
+        // }
 
         var data = event.data;
-        //alert(data);
+        console.log('messgae received')
+        // console.log(handleMessage)
 
-        if (data.action == "formFields") {
-            console.log('Response recieved for checkFormData ')
-        } else if (data.action == "addPaymentToken") {
+        // if (data.action == "formFields") {
+        //     console.log('Response recieved for checkFormData ')
+        // } else if (data.action == "addPaymentToken") {
 
-        }
+        // }
     }
 
 </script>

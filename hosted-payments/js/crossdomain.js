@@ -1,10 +1,13 @@
 function handleMessage(event) {
+            debugger;
             console.log('Message received; event origin:'+event.origin+' merchant domain:'+merchantDomain);
 			var message;
-			if ( !(event.origin === merchantDomain ) ) {
-				return false;
-			}
-
+            //TBD: uncomment
+			// if ( !(event.origin === merchantDomain ) ) {
+			// 	return false;
+			// }
+            selectedMonth = $('#month').find("option:selected").text();
+            selectedYear = $('#year').find("option:selected").text();
             console.log('Message processed ');
             var data = event.data;
             //alert(data);
@@ -67,36 +70,35 @@ function handleMessage(event) {
             }
         }
 
-        function valid_credit_card(value) {
-            // accept only digits, dashes or spaces
-            if (/[^0-9-\s]+/.test(value)) return false;
+function valid_credit_card(value) {
+    // accept only digits, dashes or spaces
+    if (/[^0-9-\s]+/.test(value)) return false;
 
-            // The Luhn Algorithm. It's so pretty.
-            var nCheck = 0, nDigit = 0, bEven = false;
-            value = value.replace(/\D/g, "");
+    // The Luhn Algorithm. It's so pretty.
+    var nCheck = 0, nDigit = 0, bEven = false;
+    value = value.replace(/\D/g, "");
 
-            for (var n = value.length - 1; n >= 0; n--) {
-                var cDigit = value.charAt(n),
-                      nDigit = parseInt(cDigit, 10);
+    for (var n = value.length - 1; n >= 0; n--) {
+        var cDigit = value.charAt(n),
+        nDigit = parseInt(cDigit, 10);
 
-                if (bEven) {
-                    if ((nDigit *= 2) > 9) nDigit -= 9;
-                }
-
-                nCheck += nDigit;
-                bEven = !bEven;
-            }
-
-            return (nCheck % 10) == 0;
+        if (bEven) {
+            if ((nDigit *= 2) > 9) nDigit -= 9;
         }
 
-        function validateCVV(cvv) {            
-            var cvvTemp = new RegExp('^[0-9]{3,4}$');
+        nCheck += nDigit;
+        bEven = !bEven;
+    }
 
-            if(!cvvTemp.test(cvv)) {
-                return false;                
-            } else {
-                return true;
-            }
-            return true;
-        }        
+    return (nCheck % 10) == 0;
+}
+
+function validateCVV(cvv) {            
+    var cvvTemp = new RegExp('^[0-9]{3,4}$');
+
+    if(!cvvTemp.test(cvv)) {
+        return false;                
+    } else {
+        return true;
+    }
+}        
