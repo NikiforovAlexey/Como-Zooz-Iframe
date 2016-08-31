@@ -1,8 +1,6 @@
 (function() {
   'use strict';
-  // debugger;
   var zoozApi;
-
   // var messageTypes = {
   //   CARD_NOT_ADDED:     'cardNotAdded',
   //   CARD_ADDED:         'cardAdded',
@@ -48,11 +46,16 @@
       style: 'btn-default',
       size: false
     });
-    $(function() {
-    $('#CreditCardInfo').submit(function() {
-            submit();
-            return true; // return false to cancel form action
-        });
+    // $(function() {
+    // $('#CreditCardInfo').submit(function() {
+    //         submit();
+    //         return false; // return false to cancel form action
+    //     });
+    // });
+    $('#sign-up').click(function(event) {
+      var cardData = getCardData();
+      if (!validateCardData(cardData)) return;
+      addPaymentMethod(cardData);
     });
   });
 
@@ -175,21 +178,11 @@
   //   year.placeholder        = data.year;
   // }
 
-
-  var submit = function() {
-    var cardData = getCardData();
-    if (!validateCardData(cardData)) return;
-    addPaymentMethod(cardData);
-  }
-
   function  addPaymentMethod(cardData){
-    var initParams = {
-                      isSandbox: true,
+    var initParams = {isSandbox: true,
                       uniqueId: 'PAPI_ZooZNP_PZZF3PLBGL22NDFF4QP7INFFHU_2'
                       };  //  App's unique  ID  as  registered  in  the Zooz developer  portal
-    debugger;
-    var zoozApi = new Zooz.Ext.External(initParams);
-
+    zoozApi = new Zooz.Ext.External(initParams);
     var paymentRequest = {
         paymentToken: getParameterByName('paymentToken'),
         email: getParameterByName('email'),
@@ -204,32 +197,36 @@
             }
         }
     };
-
     var succFunc = function (data) {
-        enableSubmitButton();
-        eventObj = {
+        console.log('succ: ', data);
+
+        var eventObj = {
             eventType: 'paymentSuccess',
             payment: {
                 paymentToken: getParameterByName('paymentToken'),
                 paymentMethodToken: data.paymentMethodToken
             }
         };
-        parent.postMessage(eventObj, targetHost);
+        // parent.postMessage(eventObj, targetHost);
         console.log(eventObj);
+        parent.document.location.href  = getParameterByName('retUrl');
     };
-    var failFunc = function () {
+    var failFunc = function (data) {
         // enableSubmitButton();
         // isGeneralError = true;
         // showErrorMessage('general');
         // setFrameHeight();
         // paymentFormElement.reset();
-        eventObj = {
+        console.log('fail:', data);
+        var eventObj = {
             eventType: 'paymentError'
         };
-        parent.postMessage(eventObj, targetHost);
+        // parent.postMessage(eventObj, targetHost);
         console.log(eventObj);
+        parent.document.location.href  = getParameterByName('retUrl');
     };
-    zoozApi.addPaymentMethod(paymentRequest, succFunc, failFunc);
+    var res = zoozApi.addPaymentMethod(paymentRequest, succFunc, failFunc);
+    console.log(res);
   }
   function getCardData() {
     return {
