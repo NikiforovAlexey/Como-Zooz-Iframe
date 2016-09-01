@@ -25,7 +25,7 @@
 
   (function initSelectOptions(){
     var str = '';
-    for(var i = 1; i <= 13; i++){
+    for(var i = 1; i < 13; i++){
         var stub = i < 10?'0' : '';
         str += '<option>'+ stub + i + '</option>';
     }
@@ -44,7 +44,7 @@
   $(document).ready(function() {
     $('.selectpicker').selectpicker({
       style: 'btn-default',
-      size: false
+      size: 6
     });
     // $(function() {
     // $('#CreditCardInfo').submit(function() {
@@ -53,10 +53,12 @@
     //     });
     // });
     $('#sign-up').click(function(event) {
+      debugger;
       var cardData = getCardData();
       if (!validateCardData(cardData)) return;
       addPaymentMethod(cardData);
     });
+    $('#sign-up').prop('disabled', getParameterByName('isValidSession') === 'false');
   });
 
   // window.addEventListener("message", handleMessage);
@@ -197,6 +199,7 @@
             }
         }
     };
+    console.log('paymentRequest', paymentRequest);
     var succFunc = function (data) {
         console.log('succ: ', data);
 
@@ -207,9 +210,9 @@
                 paymentMethodToken: data.paymentMethodToken
             }
         };
-        // parent.postMessage(eventObj, targetHost);
+        parent.postMessage(eventObj, targetHost);
         console.log(eventObj);
-        parent.document.location.href  = getParameterByName('retUrl');
+        // parent.document.location.href  = getParameterByName('retUrl');
     };
     var failFunc = function (data) {
         // enableSubmitButton();
@@ -221,9 +224,9 @@
         var eventObj = {
             eventType: 'paymentError'
         };
-        // parent.postMessage(eventObj, targetHost);
+        parent.postMessage(eventObj, targetHost);
         console.log(eventObj);
-        parent.document.location.href  = getParameterByName('retUrl');
+        // parent.document.location.href  = getParameterByName('retUrl');
     };
     var res = zoozApi.addPaymentMethod(paymentRequest, succFunc, failFunc);
     console.log(res);
