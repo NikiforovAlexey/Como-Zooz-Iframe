@@ -16,6 +16,7 @@ body {
     }
   }
   .error-msg{
+    color:#a94442;
     display: none;
   }
   .has-error .error-msg{
@@ -30,3 +31,4 @@ body {
   #zooz-logo img{
     height: 35px;
   }
+ 

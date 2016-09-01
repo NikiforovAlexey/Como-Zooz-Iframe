@@ -9,25 +9,26 @@
 
  <!-- <link rel="stylesheet" href="css/styles.css"> -->
  <link rel="stylesheet" href="https://www.dropbox.com/s/a7g1mcj3gbg4eim/styles.css?raw=1">
- 
+
 
 </head>
 <body>
   <!-- <form id="CreditCardInfo" class="form-horizontal" formnovalidate > -->
   <div class="form-horizontal well">
-    <div class="row">
+    <div class="row " >
       <div class="col-xs-8">
         <div class="form-group input-card">
           <label for="card-number" class="col-xs-3 control-label" >Card Number: </label>
           <div class="col-xs-9">
-            <input type="text" class="form-control" id="c_no" placeholder="Credit card number"  pattern="\d*" minlength="16" maxlength="16" required="true">
+            <input type="text" class="form-control validate" id="c_no" placeholder="Credit card number"  pattern="\d*" minlength="16" maxlength="16" required="true">
+            <span class="error-msg">Invalid card number</span>
           </div>
-          <span class="error-msg">invalid card number</span>
         </div>
         <div class="form-group">
           <label for="card-cvv" class="col-xs-3 control-label">CVV:</label>
           <div class="col-xs-9">
-            <input type="text" class="form-control" id="c_sec"  placeholder="CVV"  pattern="\d*" maxlength="4" required="true">
+            <input type="text" class="form-control validate" id="c_sec"  placeholder="CVV"  pattern="\d*" maxlength="4" required="true">
+            <span class="error-msg">Invalid cvv</span>
           </div>
         </div>
       </div>
@@ -35,15 +36,15 @@
         <div class="form-group">
           <label for="card-month" class="col-xs-6 control-label">Exp Month:</label>
           <div class="col-xs-6">
-            <select id='month' class="selectpicker form-control">
-            </select>
-          </div>        
+            <select id='month' class="selectpicker form-control"></select>
+            <span class="error-msg">Invalid exp month</span>
+          </div>
         </div>
         <div class="form-group">
           <label for="card-year" class="col-xs-6 control-label">Exp Year:</label>
           <div class="col-xs-6">
-            <select id='year' class="selectpicker form-control">
-            </select>
+            <select id='year' class="selectpicker form-control"></select>
+            <span class="error-msg">Invalid exp year</span>
           </div>
         </div>
       </div>
@@ -61,6 +62,10 @@
     <div class="row" style="padding:10px;">
       <div align="center" style="margin-bottom: 20px">
         By completion of the payment details and clicking <i>“Sign Up”</i> the Business (whose details above) hereby accepts and agrees to the terms and conditions of Como Business Agreement.  
+      </div>
+      <div  class="form-group">
+        <div id ='general-error-block' class ="error-msg text-center" style="font-size:medium;">Unable to process credit card:</div>
+        <div id ='general-error-block-msg' class ="error-msg text-center" style="font-size:small; font-weight:bold;"></div>
       </div>
       <div class="col-xs-offset-4 col-xs-4">
         <button type="submit" id="sign-up"   class="btn btn-primary btn-block">Sign Up</button>

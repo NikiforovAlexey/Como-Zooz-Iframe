@@ -53,12 +53,16 @@
     //     });
     // });
     $('#sign-up').click(function(event) {
-      debugger;
+      // debugger;
       var cardData = getCardData();
       if (!validateCardData(cardData)) return;
       addPaymentMethod(cardData);
     });
     $('#sign-up').prop('disabled', getParameterByName('isValidSession') === 'false');
+    $('.validate').click(function (event) {
+      $(this).parents('.form-group').removeClass('has-error').removeClass('has-danger');
+        $('#general-error-block').parents(".form-group").removeClass('has-error').removeClass('has-danger');
+    });
   });
 
   // window.addEventListener("message", handleMessage);
@@ -221,9 +225,19 @@
         // setFrameHeight();
         // paymentFormElement.reset();
         console.log('fail:', data);
+        var generalErrorblock = $('#general-error-block').parents(".form-group");
+        $('#general-error-block-msg')
+          .text(data.errorMessage)
+          .addClass('has-error')
+          .addClass('has-danger');
+        generalErrorblock
+          .addClass('has-error')
+          .addClass('has-danger');
+
         var eventObj = {
             eventType: 'paymentError'
         };
+
         parent.postMessage(eventObj, targetHost);
         console.log(eventObj);
         // parent.document.location.href  = getParameterByName('retUrl');
@@ -247,29 +261,33 @@
   // }
 
 function validateCardData(data) {
+    var result = true;
     if (!validateCardNumber(data.cardNumber)) {
       // postError(errorMessages.INVALID_CARD_NUMBER, targetOrigin);
       console.log(errorMessages.INVALID_CARD_NUMBER);
-      return false;
+      $('#c_no').parents(".form-group").addClass('has-error').addClass('has-danger');
+      result =  false;
     }
-
+    //TBD:
     if (!validateMonth(data.month)) {
       console.log(errorMessages.INVALID_MONTH);
-      return false;
+      $('#month').parents(".form-group").addClass('has-error').addClass('has-danger');
+      result =  false;
     }
-
+    //TBD:
     if (!validateYear(data.year)) {
       console.log(errorMessages.INVALID_YEAR);
-
-      return false;
+      $('#year').parents(".form-group").addClass('has-error').addClass('has-danger');
+      result =  false;
     }
 
     if (!validateCVV(data.cvv)) {
       console.log(errorMessages.INVALID_CVV);
-      return false;
+      $('#c_sec').parents(".form-group").addClass('has-error').addClass('has-danger');
+      result =  false;
     }
 
-    return true;
+    return result;
   }
 function getParameterByName(parameterName) {
     parameterName = new RegExp('[?&]' + encodeURIComponent(parameterName) + '=([^&]*)').exec(location.search);
