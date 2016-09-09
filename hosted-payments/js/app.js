@@ -16,7 +16,7 @@ var CVV         = '#c_sec';
 var MONTH       = '#month';
 var YEAR        = '#year';
 var targetHost = '*';
-
+var currCardData = 
   // select-picker option generation 
   (function initSelectOptions(){
     var str = '';
@@ -38,6 +38,8 @@ var targetHost = '*';
   })();
 
   $(document).ready(function() {
+    //lisnter
+    window.addEventListener("message", handleMessage, false);
     // select-picker init 
     $('.selectpicker').selectpicker({
       style: 'btn-default',
@@ -45,9 +47,13 @@ var targetHost = '*';
     });
 
     $('#sign-up').click(function(event) {
-      var cardData = getCardData();
-      if (!validateCardData(cardData)) return;
-      addPaymentMethod(cardData);
+      currCardData = getCardData();
+      if (!validateCardData(currCardData)){/*handlere*/}
+      var eventObj = {
+        eventType: 'fieldValidation'
+      };
+      parent.postMessage(eventObj, targetHost);
+      // addPaymentMethod(cardData);
     });
 
     $('#sign-up').prop('disabled', getParameterByName('isValidSession') === 'false');
@@ -58,6 +64,15 @@ var targetHost = '*';
     });
   });
 
+  function handleMessage(event){
+    var data = event.data;
+    if(event.data.eventType === 'validationResult'){
+      console.log('In handleMessage > validationResult');
+      if(data.result){
+        addPaymentMethod(currCardData);
+      }
+     }
+  }
   // Main Method
   function  addPaymentMethod(cardData){
     var initParams = {
@@ -82,7 +97,6 @@ var targetHost = '*';
     console.log('paymentRequest', paymentRequest);
     var succFunc = function (data) {
       console.log('succ: ', data);
-
       var eventObj = {
         eventType: 'paymentSuccess',
         payment: {
@@ -150,6 +164,9 @@ var targetHost = '*';
     $(selector).next().text(msg);
   }
   function showGeneralError(msg){
+    if(msg.indexOf('provided token has expired') !== -1){
+      msg += ' Please refresh page.'
+    }
     $('#general-error-block').parents(".form-group")    
     .addClass('has-error')
     .addClass('has-danger');
