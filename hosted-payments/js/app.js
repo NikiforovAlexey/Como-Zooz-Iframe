@@ -10,7 +10,7 @@
     INVALID_GENERAL:      'Unable to process credit card:'
   }
 
-//credit card data name mapping
+//credit card data mapping
 var CARD_NUMBER = '#c_no';
 var CVV         = '#c_sec';
 var MONTH       = '#month';
@@ -48,12 +48,11 @@ var currCardData =
 
     $('#sign-up').click(function(event) {
       currCardData = getCardData();
-      if (!validateCardData(currCardData)){/*handlere*/}
+      if (!validateCardData(currCardData)){/*handle here*/}
       var eventObj = {
         eventType: 'fieldValidation'
       };
       parent.postMessage(eventObj, targetHost);
-      // addPaymentMethod(cardData);
     });
 
     $('#sign-up').prop('disabled', getParameterByName('isValidSession') === 'false');
