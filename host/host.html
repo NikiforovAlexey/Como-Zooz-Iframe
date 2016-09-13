@@ -18,7 +18,7 @@
 <br>
 
 <!--Comment1 change src to the zooz hosted payments domain https://paymentpages.zooz.com" file location-->
-<iframe id="zooziframe" width="710" height="900px"; frameborder="0"  style ='margin-top: 200px;' scrolling="no" src="../hosted-payments/iframe-passive.html" ></iframe>
+<iframe id="zooziframe" width="710" frameborder="0"  style ='margin-top: 200px;' scrolling="no" src="../hosted-payments/iframe-passive.html" ></iframe>
 <!-- http://como.local.com/Como/hosted-payments/iframe-passive.html?cardHolderName='test@email.com'&amp;paymentToken=3NCFYZERQDJNMF7X4R2KEL76J4&amp;email='test@email.com&amp;retUrl=https%3A%2F%2Fcontract-signup-developer-edition.eu6.force.com%2FCongratulationsPage
 <br> -->
 <br>
@@ -26,10 +26,18 @@
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="js/my-domain.js"></script>
 <script type="text/javascript" src="js/postMessage.js"></script>
-
+<script type="text/javascript" src="js/iframeResizer.min.js"> </script>
 <script type="text/javascript">
     window.addEventListener("message", handleMessage, false);
-
+    $( document ).ready(function() {
+            debugger;
+            $('#zooziframe').iFrameResize(
+            {
+                log : true,
+                resizedCallback : function(messageData){ debugger;// Callback fn when resize is received
+                }
+            });
+        });
     function handleMessage(event) {
 
         var message;
