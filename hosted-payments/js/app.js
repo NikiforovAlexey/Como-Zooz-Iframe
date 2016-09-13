@@ -48,7 +48,7 @@ var currCardData =
 
     $('#sign-up').click(function(event) {
       currCardData = getCardData();
-      if (!validateCardData(currCardData)){/*handle here*/}
+    if (!validateCardData(currCardData)){/*handle here*/}
       var eventObj = {
         eventType: 'fieldValidation'
       };
@@ -70,7 +70,7 @@ var currCardData =
       if(data.result){
         addPaymentMethod(currCardData);
       }
-     }
+    }
   }
   // Main Method
   function  addPaymentMethod(cardData){
@@ -110,7 +110,7 @@ var currCardData =
       console.log('fail:', data);
       showGeneralError(data.errorMessage);
       var eventObj = {
-      eventType: 'paymentError'
+        eventType: 'paymentError'
       };
       console.log(eventObj);
       parent.postMessage(eventObj, targetHost);
@@ -199,5 +199,4 @@ var currCardData =
   function validateCVV(cvv) {
     return /^[0-9]{3,4}$/.test(cvv);
   }
-
 }());
