@@ -68,19 +68,19 @@ var currCardData =
     if(event.data.eventType === 'validationResult'){
       console.log('In handleMessage > validationResult');
       if(data.result){
-        addPaymentMethod(currCardData);
+        addPaymentMethod(currCardData, data.customerToken);
       }
     }
   }
   // Main Method
-  function  addPaymentMethod(cardData){
+  function  addPaymentMethod(cardData, paymentToken){
     var initParams = {
       isSandbox: true,
       uniqueId: 'PAPI_ZooZNP_PZZF3PLBGL22NDFF4QP7INFFHU_2'
     };  
     zoozApi = new Zooz.Ext.External(initParams);
     var paymentRequest = {
-      paymentToken: getParameterByName('paymentToken'),
+      paymentToken: paymentToken,
       email: getParameterByName('email'),
       paymentMethod: {
         paymentMethodType: 'CreditCard',
