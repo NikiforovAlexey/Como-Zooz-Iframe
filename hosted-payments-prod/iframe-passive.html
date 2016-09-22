@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <title></title>
+ <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css"/>
+ <link rel="stylesheet" href="lib/bootstrap/css/bootstrap-select.min.css">
+ <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="form-horizontal well">
+    <div class="row " >
+      <div class="col-xs-8">
+        <div class="form-group input-card">
+          <label for="card-number" class="col-xs-3 control-label" >Card Number: </label>
+          <div class="col-xs-9">
+            <input type="text" class="form-control validate" id="c_no" placeholder="Credit card number"  pattern="\d*" minlength="16" maxlength="16" required="true">
+            <span class="error-msg"></span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="card-cvv" class="col-xs-3 control-label">CVV:</label>
+          <div class="col-xs-9">
+            <input type="text" class="form-control validate" id="c_sec"  placeholder="CVV"  pattern="\d*" maxlength="4" required="true">
+            <span class="error-msg"></span>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-4">
+        <div class="form-group">
+          <label for="card-month" class="col-xs-6 control-label">Exp Month:</label>
+          <div class="col-xs-6">
+            <select id='month' class="selectpicker form-control"></select>
+            <span class="error-msg"></span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="card-year" class="col-xs-6 control-label">Exp Year:</label>
+          <div class="col-xs-6">
+            <select id='year' class="selectpicker form-control"></select>
+            <span class="error-msg"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="margin:5px;">
+      <div id='zooz-logo' class="col-xs-1" align="center">
+        <img src="images/logo.png" alt="">
+      </div>
+      <div id = 'card-logo-block' class="col-xs-offset-7 col-xs-4" align="center">
+        <img src="images/LeumiVisa.png" alt="">
+        <img src="images/MasterCard.png" alt="">
+        <img src="images/Discover.png" alt="">
+      </div>
+    </div>
+    <div class="row" style="padding:10px;">
+      <div align="center" style="margin-bottom: 20px">
+        By completion of the payment details and clicking <i>"Sign Up"</i> the Business (whose details above) hereby accepts and agrees to the terms and conditions of Como Business Agreement.  
+      </div>
+      <div class="form-group">
+        <div id ='general-error-block' class ="error-msg text-center" style="font-size:medium;"></div>
+        <div id ='general-error-block-msg' class ="error-msg text-center" style="font-size:small; font-weight:bold;"></div>
+      </div>
+      <div class="col-xs-offset-4 col-xs-4">
+        <button type="submit" id="sign-up"   class="btn btn-primary btn-block">Sign Up</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12"><img id ="payment-line" src="images/payment-line.png" alt=""></div> 
+    </div>
+  </div>
+</div>
+<script src="lib/jquery.min.js"></script>
+<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://app.zooz.com/mobile/checkoutapi/js/checkout-ext-api.js"></script>
+<script src="lib/bootstrap/js/bootstrap-select.min.js"></script>
+<script src='lib/iframeResizer.contentWindow.js'></script>
+<script src="js/app.js"></script>
+<script src="js/validateCreditCard.js"></script>
+<!-- <script type="text/javascript" src="js/my-domain.js"></script> -->
+</body>
+</html>
