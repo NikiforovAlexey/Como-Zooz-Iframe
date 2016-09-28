@@ -37,7 +37,7 @@ var currCardData =
     .selectpicker('refresh');
   })();
 
-  $(document).ready(function() {
+  $(document).ready(function() { 
     //lisnter
     window.addEventListener("message", handleMessage, false);
     // select-picker init 
@@ -64,7 +64,30 @@ var currCardData =
   });
 
   function handleMessage(event){
-    var data = event.data;
+    var data = event.data;    
+    if(event.data.eventType === 'dataInit'){
+      var languageFilter = function(){
+        return (data.lang ==='iw') };
+      // label initialization 
+      $('#terms-label').text(data.buttonLabel)
+        .filter(languageFilter).attr('dir','rtl');
+      $('#sign-up').text(data.buttonValue)
+      .filter(languageFilter).attr('dir','rtl');
+      // labels processing 
+      if(data.labels)
+      var isCompleteLabelSet = data.labels.every(function(el, ind){return el?true:false;});
+      if(isCompleteLabelSet && data.labels.length !== 0){
+          $('label').each(function(index, el){
+              $(el).text('text' + index).filter(languageFilter);
+              $(el).before($(el).next());
+          });
+          if(languageFilter()){
+            $('.input-block').attr('dir', 'rtl');
+          }
+      }
+    
+      return;
+    }
     if(event.data.eventType === 'validationResult'){
       console.log('In handleMessage > validationResult');
       if(data.result){
