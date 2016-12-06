@@ -70,22 +70,24 @@ var currCardData =
         return (data.lang ==='iw') };
       // label initialization 
       $('#terms-label').text(data.buttonLabel)
-        .filter(languageFilter).attr('dir','rtl');
+      .filter(languageFilter).attr('dir','rtl');
       $('#sign-up').text(data.buttonValue)
       .filter(languageFilter).attr('dir','rtl');
       // labels processing 
       if(data.labels)
-      var isCompleteLabelSet = data.labels.every(function(el, ind){return el?true:false;});
+        var isCompleteLabelSet = data.labels.every(function(el, ind){return el?true:false;});
       if(isCompleteLabelSet && data.labels.length !== 0){
-          $('label').each(function(index, el){
-              $(el).text(data.labels[index]).filter(languageFilter);
-              $(el).before($(el).next());
-          });
+        $('label').each(function(index, el){
+          $(el).text(data.labels[index]).filter(languageFilter);
           if(languageFilter()){
-            $('.input-block').attr('dir', 'rtl');
+            $(el).before($(el).next());
           }
+        });
+        if(languageFilter()){
+          $('.input-block').attr('dir', 'rtl');
+        }
       }
-    
+      
       return;
     }
     if(event.data.eventType === 'validationResult'){

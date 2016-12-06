@@ -9,38 +9,49 @@
 <body>
   <div class="form-horizontal well">
     <div class="row input-block" >
-      <div class="col-xs-8">
-        <div class="form-group input-card">
-          <label for="card-number" class="col-xs-3 control-label" >Card Number: </label>
-          <div class="col-xs-9">
-            <input type="text" class="form-control validate" id="c_no" placeholder="Credit card number"  pattern="\d*" minlength="16" maxlength="16" required="true">
-            <span class="error-msg"></span>
+      <div class="col-xs-12">
+        <div class="row">
+          <div class="col-xs-8">
+            <div class="form-group input-card">
+              <label for="card-number" class="col-xs-3 control-label" >Card Number: </label>
+              <div class="col-xs-9">
+                <input type="text" class="form-control validate" id="c_no" placeholder="Credit card number"  pattern="\d*" minlength="16" maxlength="16" required="true">
+                <span class="error-msg"></span>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-4">
+            <div class="form-group">
+              <label for="card-month" class="col-xs-6 control-label">Exp Month:</label>
+              <div class="col-xs-6">
+                <select id='month' class="selectpicker form-control"></select>
+                <span class="error-msg"></span>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="form-group">
-          <label for="card-cvv" class="col-xs-3 control-label">CVV:</label>
-          <div class="col-xs-9">
-            <input type="text" class="form-control validate" id="c_sec"  placeholder="CVV"  pattern="\d*" maxlength="4" required="true">
-            <span class="error-msg"></span>
+        <div class="row">
+          <div class="col-xs-8">
+            <div class="form-group">
+              <label for="card-cvv" class="col-xs-3 control-label">CVV:</label>
+              <div class="col-xs-9">
+                <input type="text" class="form-control validate" id="c_sec"  placeholder="CVV"  pattern="\d*" maxlength="4" required="true">
+                <span class="error-msg"></span>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-4">
+            <div class="form-group">
+              <label for="card-year" class="col-xs-6 control-label">Exp Year:</label>
+              <div class="col-xs-6">
+                <select id='year' class="selectpicker form-control"></select>
+                <span class="error-msg"></span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <div class="col-xs-4">
-        <div class="form-group">
-          <label for="card-month" class="col-xs-6 control-label">Exp Month:</label>
-          <div class="col-xs-6">
-            <select id='month' class="selectpicker form-control"></select>
-            <span class="error-msg"></span>
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="card-year" class="col-xs-6 control-label">Exp Year:</label>
-          <div class="col-xs-6">
-            <select id='year' class="selectpicker form-control"></select>
-            <span class="error-msg"></span>
-          </div>
-        </div>
-      </div>
+
     </div>
     <div class="row" style="margin:5px;">
       <div id='zooz-logo' class="col-xs-1" align="center">

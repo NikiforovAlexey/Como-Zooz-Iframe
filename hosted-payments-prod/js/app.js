@@ -79,7 +79,9 @@ var currCardData =
       if(isCompleteLabelSet && data.labels.length !== 0){
         $('label').each(function(index, el){
           $(el).text(data.labels[index]).filter(languageFilter);
-          $(el).before($(el).next());
+          if(languageFilter()){
+            $(el).before($(el).next());
+          }
         });
         if(languageFilter()){
           $('.input-block').attr('dir', 'rtl');
