@@ -101,7 +101,7 @@ var currCardData =
   function  addPaymentMethod(cardData, paymentToken){
     var initParams = {
       isSandbox: false,
-      uniqueId: 'PAPI_ZooZNP_TXRYLFPIXLGKZCX37TXONGT6NY_1'
+      uniqueId: 'PAPI_ZooZNP_TXRYLFPIXLGKZCX37TXONGT6NY_7'
     };  
     zoozApi = new Zooz.Ext.External(initParams);
     var paymentRequest = {
