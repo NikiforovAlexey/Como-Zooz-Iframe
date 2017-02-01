@@ -103,6 +103,7 @@ var currCardData =
       isSandbox: false,
       uniqueId: 'PAPI_ZooZNP_TXRYLFPIXLGKZCX37TXONGT6NY_7'
     };  
+    $('#sign-up').prop('disabled', true);
     zoozApi = new Zooz.Ext.External(initParams);
     var paymentRequest = {
       paymentToken: paymentToken,
@@ -134,6 +135,7 @@ var currCardData =
     var failFunc = function (data) {
       console.log('fail:', data);
       showGeneralError(data.errorMessage);
+      $('#sign-up').prop('disabled', false);
       var eventObj = {
         eventType: 'paymentError'
       };

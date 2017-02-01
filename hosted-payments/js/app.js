@@ -47,7 +47,7 @@ var currCardData =
     });
 
     $('#sign-up').click(function(event) {
-      currCardData = getCardData();
+    currCardData = getCardData();
     if (!validateCardData(currCardData)){/*handle here*/}
       var eventObj = {
         eventType: 'fieldValidation'
@@ -102,7 +102,8 @@ var currCardData =
     var initParams = {
       isSandbox: true,
       uniqueId: 'PAPI_ZooZNP_PZZF3PLBGL22NDFF4QP7INFFHU_2'
-    };  
+    };
+    $('#sign-up').prop('disabled', true);
     zoozApi = new Zooz.Ext.External(initParams);
     var paymentRequest = {
       paymentToken: paymentToken,
@@ -134,6 +135,7 @@ var currCardData =
     var failFunc = function (data) {
       console.log('fail:', data);
       showGeneralError(data.errorMessage);
+      $('#sign-up').prop('disabled', false);
       var eventObj = {
         eventType: 'paymentError'
       };
